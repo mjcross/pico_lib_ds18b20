@@ -5,7 +5,7 @@ A library that sits alongside my [pico_lib_onewire](https://github.com/mjcross/p
 For a demonstration of how to use the libraries see [pico_ds18b20_example](https://github.com/mjcross/pico_ds18b20_example).
 
 ## about the device
-The [DS18B20](https://www.analog.com/media/en/technical-documentation/data-sheets/ds18b20.pdf) is an inexpensive digital temperature sensor with a resolution of about 0.1ºC and an absolute accuracy of +/- 0.5ºC. It is widely available as either a discrete transistor-style device (TO-92) package or in a waterproof 6mm stainless steel encapsulation with a 3 core cable.
+The [DS18B20](https://www.analog.com/media/en/technical-documentation/data-sheets/ds18b20.pdf) is an inexpensive digital temperature sensor with a resolution of about 0.1ºC and an absolute accuracy of +/- 0.5ºC. It is widely available as either a discrete transistor-style package (TO-92) or in a waterproof 6mm stainless steel encapsulation with a 3 core cable.
 
 The cable colours for the wired sensors are typically:
 
@@ -34,7 +34,7 @@ $ git submodule add <path-to-library-repository or URL>
 Note that anyone cloning your repositiory should now use `git clone --recursive` to make sure they get the full source tree.
 
 ## including the library in your build
-Once you've imported both libraries you can include them in your CMake build by including the following lines in your top level CMakeLists.txt:
+Once you've imported both libraries you can include them in your CMake build by putting the following lines in your top level CMakeLists.txt:
 ```
 add_subdirectory(lib_pico_onewire)
 add_subdirectory(lib_pico_ds18b20)
@@ -48,12 +48,12 @@ You should now be able to add
 #include "onewire.h"
 #include "ds18b20.h"
 ```
-to your source code and start using the functions from each library.
+to your source code and start using the functions from either library.
 
 ## using the library
-As noted above this library just adds convenience functions for working with the DS18B20, so you'll still need to use the [pico_lib_onewire](https://github.com/mjcross/pico_lib_onewire) API for basic functions like initialising and scanning the bus.
+As noted above this library just adds convenience functions for working with the DS18B20: you'll still need to use the [pico_lib_onewire](https://github.com/mjcross/pico_lib_onewire) API for basic functions like initialising and scanning the bus.
 
-The extra functions added are:
+The functions added are:
 
 `void ds18b20_start_convert_all(const onewire_t ow)`
 
@@ -65,7 +65,7 @@ Assert a reset condition, then instruct all connected devices to start a tempera
 **Outputs:** 
 - none
 
-The temperature conversion process takes about a second for the (default) 12-bit resolution mode. To check whether all devices have finished their conversion use `ds18b20_is_busy()` (see below).
+The temperature conversion process takes about a second for the default 12-bit resolution mode. To check whether all devices have finished their conversion use `ds18b20_is_busy()` (see below).
 
 ----
 `bool ds18b20_is_busy(const onewire_t ow)`
@@ -78,7 +78,7 @@ Check whether all devices have finished a temperature conversion.
 **Outputs:**
 - returns `true` if any device is still doing a conversion, or `false` when all devices have finished.
 
-While a DS18B20 device is doing a temperature conversion it will pull the bus low in response to the master generating a 'read' timeslot (see the [datasheet](https://www.analog.com/media/en/technical-documentation/data-sheets/ds18b20.pdf)).
+The function uses the behaviour that a DS18B20 device doing a temperature conversion will pull the bus low in response to the master generating a 'read' timeslot (see the [datasheet](https://www.analog.com/media/en/technical-documentation/data-sheets/ds18b20.pdf)).
 
 ----
 `float ds18b20_fetch_temperature(const onewire_t ow, const onewire_id_t *id_ptr)`
@@ -92,4 +92,4 @@ Read the result of a temperature conversion on an individual device.
 **Outputs:**
 - returns the temperature in degrees centrigrade
 
-The device actually returns the temperature in 1/16ths of a degree as a signed 16-bit integer which the function converts to a float. You may prefer to use the raw integer value if you want to avoid using floating point arithmetic.
+The device actually returns the temperature in 1/16ths of a degree as a signed 16-bit integer, which the function converts to a float. You may prefer to use the raw value if you want to avoid using floating point arithmetic in your binary.
