@@ -36,8 +36,8 @@ Note that anyone cloning your repositiory should now use `git clone --recursive`
 ## including the library in your build
 Once you've imported both libraries you can include them in your CMake build by putting the following lines in your top level CMakeLists.txt:
 ```
-add_subdirectory(lib_pico_onewire)
-add_subdirectory(lib_pico_ds18b20)
+add_subdirectory(pico_lib_onewire)
+add_subdirectory(pico_lib_ds18b20)
 target_link_libraries(<project-name> 
     pico_lib_onewire
     pico_lib_ds18b20
